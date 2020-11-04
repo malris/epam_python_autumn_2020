@@ -20,9 +20,3 @@ def check_sum_of_four(a: List[int], b: List[int], c: List[int], d: List[int]) ->
     for first_sum_key, first_sum_value in first_sum_chunk.items():
         result += first_sum_value * second_sum_chunk.get(-1 * first_sum_key, 0)
     return result
-
-
-# a = [1, 2, 3]
-# b = [-2, -1, -3]
-# c = [3, -1, 2]
-# d = [3, 0, 2]
