@@ -13,8 +13,7 @@ from homework1.task04.sum_of_four.sum_of_four import check_sum_of_four
         ([], [], [], [], 0),
     ],
 )
-def test_power_of_2(a: List, b: List, c: List, d: List, expected_result: int):
+def test_sum_of_four(a: List, b: List, c: List, d: List, expected_result: int):
     actual_result = check_sum_of_four(a, b, c, d)
-    print(actual_result == expected_result)
 
     assert actual_result == expected_result
