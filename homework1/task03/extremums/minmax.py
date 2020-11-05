@@ -8,17 +8,21 @@ with open("some_file.txt") as fi:
     for line in fi:
         ...
 """
-from typing import List, Tuple
-
-
-def read_list_of_values(file_name: str) -> List[int]:
-    list_of_values = []
-    with open(file_name, "r") as fi:
-        for line in fi:
-            list_of_values.append(int(line))
-    return list_of_values
+from typing import Tuple
 
 
 def find_maximum_and_minimum(file_name: str) -> Tuple[int, int]:
-    list_of_values = read_list_of_values(file_name)
-    return min(list_of_values), max(list_of_values)
+    minimum, maximum = None, None
+    with open(file_name, "r") as fi:
+        for line in fi:
+            try:
+                value = int(line)
+            except ValueError:
+                continue
+            if (minimum is None) and (maximum is None):
+                minimum, maximum = value, value
+            elif value < minimum:
+                minimum = value
+            elif value > maximum:
+                maximum = value
+    return minimum, maximum
