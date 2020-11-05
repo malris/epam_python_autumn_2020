@@ -1,7 +1,7 @@
 from typing import Tuple
 
 import pytest
-from extremums.minmax import find_maximum_and_minimum
+from homework1.task03.extremums.minmax import find_maximum_and_minimum
 from pytest_mock import mocker
 
 

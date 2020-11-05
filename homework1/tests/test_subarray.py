@@ -1,7 +1,7 @@
 from typing import List
 
 import pytest
-from subarray_sum.subarray import find_maximal_subarray_sum
+from homework1.task05.subarray_sum.subarray import find_maximal_subarray_sum
 
 
 @pytest.mark.parametrize(

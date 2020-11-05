@@ -1,7 +1,7 @@
 from typing import Sequence
 
 import pytest
-from fibonacci.fib import check_fibonacci
+from homework1.task02.fibonacci.fib import check_fibonacci
 
 
 @pytest.mark.parametrize(
