@@ -1,0 +1,6 @@
+pytest
+pytest-sugar
+pytest-mock
+pre-commit
+isort
+black
