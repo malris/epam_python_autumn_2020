@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 import pytest
-from homework2.task2.majorminor import major_and_minor_elem
+from homework2.task02.majorminor import major_and_minor_elem
 
 
 @pytest.mark.parametrize(

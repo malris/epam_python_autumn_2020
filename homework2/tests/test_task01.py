@@ -1,4 +1,4 @@
-import homework2.task1.symbols
+import homework2.task01.symbols
 import pytest
 
 
@@ -28,7 +28,7 @@ import pytest
 def test_form_longest_diverse_words_list(
     cur_list: list[str], words: list[str], length: int, expected_result: list[str]
 ):
-    actual_result = homework2.task1.symbols._form_longest_diverse_words_list(
+    actual_result = homework2.task01.symbols._form_longest_diverse_words_list(
         cur_list, words, length
     )
     assert actual_result == expected_result
@@ -56,7 +56,7 @@ def test_form_longest_diverse_words_list(
     ],
 )
 def test_form_words_dictionary(value: list[str], expected_result: dict[int, list[int]]):
-    actual_result = homework2.task1.symbols._form_words_dictionary(value)
+    actual_result = homework2.task01.symbols._form_words_dictionary(value)
     assert actual_result == expected_result
 
 
@@ -81,7 +81,7 @@ def test_form_words_dictionary(value: list[str], expected_result: dict[int, list
     ],
 )
 def test_get_longest_diverse_words(value: str, expected_result: str):
-    actual_result = homework2.task1.symbols.get_longest_diverse_words(value)
+    actual_result = homework2.task01.symbols.get_longest_diverse_words(value)
     assert actual_result == expected_result
 
 
@@ -90,7 +90,7 @@ def test_get_longest_diverse_words(value: str, expected_result: str):
     [("test_staff/my_test_data.txt", "a"), ("test_staff/data.txt", "›")],  # \u203a
 )
 def test_get_rarest_char(value: str, expected_result: str):
-    actual_result = homework2.task1.symbols.get_rarest_char(value)
+    actual_result = homework2.task01.symbols.get_rarest_char(value)
     assert actual_result == expected_result
 
 
@@ -102,7 +102,7 @@ def test_get_rarest_char(value: str, expected_result: str):
     ],
 )
 def test_count_punctuation_chars(value: str, expected_result: int):
-    actual_result = homework2.task1.symbols.count_punctuation_chars(value)
+    actual_result = homework2.task01.symbols.count_punctuation_chars(value)
     assert actual_result == expected_result
 
 
@@ -114,7 +114,7 @@ def test_count_punctuation_chars(value: str, expected_result: int):
     ],
 )
 def test_count_non_ascii_chars(value: str, expected_result: int):
-    actual_result = homework2.task1.symbols.count_non_ascii_chars(value)
+    actual_result = homework2.task01.symbols.count_non_ascii_chars(value)
     assert actual_result == expected_result
 
 
@@ -126,5 +126,5 @@ def test_count_non_ascii_chars(value: str, expected_result: int):
     ],
 )
 def test_get_most_common_non_ascii_char(value: str, expected_result: int):
-    actual_result = homework2.task1.symbols.get_most_common_non_ascii_char(value)
+    actual_result = homework2.task01.symbols.get_most_common_non_ascii_char(value)
     assert actual_result == expected_result
