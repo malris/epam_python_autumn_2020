@@ -1,3 +1,4 @@
+import io
 from typing import Any, Sequence
 
 import pytest
@@ -14,14 +15,12 @@ def test_power_func_cached_2_times(arguments: Sequence[Any]):
     assert actual_result1 is actual_result2 is actual_result3 is not actual_result4
 
 
-def test_inp_func_cached_2_times(pytestconfig):
-    capture_manager = pytestconfig.pluginmanager.getplugin("capturemanager")
-    capture_manager.suspend_global_capture(in_=True)
-
+def test_inp_func_cached_2_times(monkeypatch):
+    monkeypatch.setattr("sys.stdin", io.StringIO("str1"))
     actual_result1 = inp_func()
     actual_result2 = inp_func()
     actual_result3 = inp_func()
-    actual_result4 = inp_func()
 
-    capture_manager.resume_global_capture()
+    monkeypatch.setattr("sys.stdin", io.StringIO("str1"))
+    actual_result4 = inp_func()
     assert actual_result1 is actual_result2 is actual_result3 is not actual_result4
