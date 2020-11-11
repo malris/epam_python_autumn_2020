@@ -5,6 +5,14 @@ import struct
 import time
 
 
+"""
+Calculate total sum of slow_calculate() of all numbers starting from 0 to 500. 
+Calculation time should not take more than a minute. 
+Use functional capabilities of multiprocessing module. 
+You are not allowed to modify slow_calculate function.
+"""
+
+
 def slow_calculate(value):
     """Some weird voodoo magic calculations"""
     time.sleep(random.randint(1, 3))
