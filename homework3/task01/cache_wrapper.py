@@ -13,7 +13,7 @@ def cache(times: int = 1) -> Callable:
         def wrapped(*args: Collection[Any]) -> Any:
             args_in_cache = bool(args in cache_func_results)
             if (not args_in_cache) or (
-                args_in_cache and cache_func_results[args][1] + 1 > times
+                args_in_cache and cache_func_results[args][1] >= times
             ):
                 cache_func_results[args] = [func(*args), 0]
             else:

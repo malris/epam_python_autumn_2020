@@ -9,7 +9,6 @@ Write a function that detects if a number is Armstrong number in functionaly sty
  - use map or other utilities from functools library,
  - use anonymous functions (or use function as argument)
  - do not use loops, preferably using list comprehensions
-### Example function signature and call
 """
 
 
@@ -19,7 +18,7 @@ def is_armstrong(number: int) -> bool:
         == sum(
             map(
                 lambda x, power=len(str(number)): int(x) ** power,
-                [digit for digit in str(number)],
+                str(number),
             )
         )
         if number is not None and number >= 0

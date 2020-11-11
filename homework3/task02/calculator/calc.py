@@ -1,16 +1,14 @@
+"""
+Calculate total sum of slow_calculate() of all numbers starting from 0 to 500.
+Calculation time should not take more than a minute.
+Use functional capabilities of multiprocessing module.
+You are not allowed to modify slow_calculate function.
+"""
 import concurrent.futures
 import hashlib
 import random
 import struct
 import time
-
-
-"""
-Calculate total sum of slow_calculate() of all numbers starting from 0 to 500. 
-Calculation time should not take more than a minute. 
-Use functional capabilities of multiprocessing module. 
-You are not allowed to modify slow_calculate function.
-"""
 
 
 def slow_calculate(value):
@@ -21,8 +19,8 @@ def slow_calculate(value):
 
 
 def sum_slow_calculations():
-    numbers_to_calculate = [i for i in range(500)]
-    with concurrent.futures.ProcessPoolExecutor(max_workers=50) as executor:
+    numbers_to_calculate = range(500)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=500) as executor:
         total_sum = sum(
             int(calc_res)
             for calc_res in executor.map(slow_calculate, numbers_to_calculate)

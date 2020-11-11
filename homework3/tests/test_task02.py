@@ -1,7 +1,8 @@
+import time
 from typing import Any
 
 import pytest
-from homework3.task02.calculator.calc import *
+from homework3.task02.calculator.calc import slow_calculate, sum_slow_calculations
 
 
 @pytest.mark.parametrize(
@@ -16,3 +17,10 @@ def test_slow_calculations(value: Any, expected_result: int):
 def test_sum_of_slow_calculations(expected_result: int):
     actual_result = sum_slow_calculations()
     assert actual_result == expected_result
+
+
+@pytest.mark.parametrize(["max_execution_time"], [[60]])
+def test_sum_of_slow_calculations_execution_time(max_execution_time: int):
+    start_time = time.time()
+    sum_slow_calculations()
+    assert time.time() - start_time <= max_execution_time
