@@ -1,11 +1,12 @@
 import pytest
-from homework2.task01.symbols import _form_longest_diverse_words_list
-from homework2.task01.symbols import _form_words_dictionary
-from homework2.task01.symbols import count_non_ascii_chars
-from homework2.task01.symbols import count_punctuation_chars
-from homework2.task01.symbols import get_longest_diverse_words
-from homework2.task01.symbols import get_most_common_non_ascii_char
 from homework2.task01.symbols import get_rarest_char
+
+from homework2.task01.symbols import _form_longest_diverse_words_list  # NOQA
+from homework2.task01.symbols import _form_words_dictionary  # NOQA
+from homework2.task01.symbols import count_non_ascii_chars  # NOQA
+from homework2.task01.symbols import count_punctuation_chars  # NOQA
+from homework2.task01.symbols import get_longest_diverse_words  # NOQA
+from homework2.task01.symbols import get_most_common_non_ascii_char  # NOQA
 
 
 @pytest.mark.parametrize(
