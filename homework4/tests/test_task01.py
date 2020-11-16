@@ -7,28 +7,29 @@ from homework4.task01.read_file import read_magic_number
 
 @pytest.fixture
 def file_cleaner():
-    test_file = open("test_file.txt", "w")
-    yield
-    test_file.close()
+    open("test_file.txt", "w+").close()
+    yield os.path.join(os.path.dirname(__file__), "test_file.txt")
     os.remove("test_file.txt")
 
 
-@pytest.mark.usefixtures("file_cleaner")
-@pytest.mark.parametrize("value", [1, 1.0, 2.5, 2.99])
-def test_magic_number_is_true(value: float):
-    with open("test_file.txt", "w") as fi:
-        fi.write("{:f}\n".format(value))
-    path_to_file = os.path.join(os.path.dirname(__file__), "test_file.txt")
-    assert read_magic_number(path_to_file) is True
-
-
-@pytest.mark.usefixtures("file_cleaner")
-@pytest.mark.parametrize("value", [-2, 0.5, 3, 3.0])
-def test_magic_number_is_false(value: float):
-    with open("test_file.txt", "w") as fi:
-        fi.write("{:f}\n".format(value))
-    path_to_file = os.path.join(os.path.dirname(__file__), "test_file.txt")
-    assert read_magic_number(path_to_file) is False
+@pytest.mark.parametrize(
+    ["value", "expected_result"],
+    [
+        (1, True),
+        (1.0, True),
+        (2.5, True),
+        (2.99, True),
+        (-2, False),
+        (0.5, False),
+        (3, False),
+        (3.0, False),
+    ],
+)
+def test_magic_number_valid_values(value: float, expected_result: bool, file_cleaner):
+    test_file = file_cleaner
+    with open(test_file, "w") as fi:
+        fi.write(f"{value}\n")
+    assert read_magic_number(test_file) is expected_result
 
 
 def test_file_for_magic_number_does_not_exist():
@@ -36,11 +37,10 @@ def test_file_for_magic_number_does_not_exist():
         read_magic_number("non_existing_file.txt")
 
 
-@pytest.mark.usefixtures("file_cleaner")
 @pytest.mark.parametrize("value", ["not_a_digit"])
-def test_magic_number_raises_value_error(value: Any):
-    with open("test_file.txt", "w") as fi:
-        fi.write("{}\n".format(value))
-        path_to_file = os.path.join(os.path.dirname(__file__), "test_file.txt")
+def test_magic_number_raises_value_error(value: Any, file_cleaner):
+    test_file = file_cleaner
+    with open(test_file, "w") as fi:
+        fi.write(f"{value}\n")
         with pytest.raises(ValueError, match="line can't be transformed to float."):
-            read_magic_number(path_to_file)
+            read_magic_number(test_file)
