@@ -60,7 +60,7 @@ def fizzbuzz(n: int) -> List[str]:
     try:
         return [_get_replaced_value(val) for val in range(1, n + 1)]
     except Exception as exc:
-        raise ValueError("n is not a number, n: {}".format(n))
+        raise ValueError(f"n is not a number, n: {n}")
 
 
 if __name__ == "__main__":

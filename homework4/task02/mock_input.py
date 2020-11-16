@@ -25,7 +25,7 @@ def count_dots_on_i(url: str) -> int:
     try:
         response = urlopen(url)
     except Exception as exc:
-        raise ValueError("Unreachable {}".format(url))
+        raise ValueError(f"Unreachable {url}")
 
     total_sum_of_i = 0
     char = " "

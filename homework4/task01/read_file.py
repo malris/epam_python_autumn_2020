@@ -31,9 +31,9 @@ def read_magic_number(path: str) -> bool:
                 digit = float(first_line)
             except Exception as exc:
                 raise ValueError(
-                    "line can't be transformed to float. line: '{}'".format(first_line)
+                    f"line can't be transformed to float. line: '{first_line}'"
                 )
             else:
                 return 1 <= digit < 3
     else:
-        raise FileNotFoundError("No such file or directory: {}".format(path))
+        raise FileNotFoundError(f"No such file or directory: {path}")
