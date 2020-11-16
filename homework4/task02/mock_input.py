@@ -14,23 +14,13 @@ You will learn:
  - how to write complex mocks
  - how to raise an exception form mocks
  - do a simple network requests
->>> count_dots_on_i("https://example.com/")
-59
-
 """
-from urllib.request import urlopen
+import requests
 
 
 def count_dots_on_i(url: str) -> int:
     try:
-        response = urlopen(url)
+        response = requests.get(url)
     except Exception as exc:
         raise ValueError(f"Unreachable {url}")
-
-    total_sum_of_i = 0
-    char = " "
-    while char:
-        char = response.read(1).decode("utf-8")
-        total_sum_of_i += char == "i"
-
-    return total_sum_of_i
+    return response.text.count("i")
