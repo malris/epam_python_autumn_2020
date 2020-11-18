@@ -49,11 +49,6 @@ class Homework:
     def is_active(self) -> bool:
         return dt.datetime.now() < self.created + self.deadline
 
-    def __str__(self):
-        return str(
-            f"text: {self.text}\ndeadline: {self.deadline}\ncreated: {self.created}"
-        )
-
 
 class Student:
     """
