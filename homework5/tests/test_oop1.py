@@ -14,9 +14,12 @@ def test_homework_is_active(args: Sequence[Any], expected_result: bool):
 
 
 @pytest.mark.parametrize(["homework", "expected_result"], [(Homework("text", 0), None)])
-def test_student_do_homework_too_late(homework: Homework, expected_result: Any):
+def test_student_do_homework_too_late(homework: Homework, expected_result: Any, capfd):
     student = Student("Ivan", "Ivanov")
-    assert student.do_homework(homework) is None
+    actual_result = student.do_homework(homework)
+    out, err = capfd.readouterr()
+    assert actual_result is None
+    assert out == "You are late\n"
 
 
 @pytest.mark.parametrize("homework", [Homework("text", 1)])

@@ -34,6 +34,7 @@ PEP8 соблюдать строго.
 давать логичные подходящие имена.
 """
 import datetime as dt
+from typing import Optional
 
 
 class Homework:
@@ -60,7 +61,7 @@ class Student:
         self.last_name = last_name
 
     @staticmethod
-    def do_homework(homework: Homework) -> Homework:
+    def do_homework(homework: Homework) -> Optional[Homework]:
         if homework.is_active():
             return homework
         else:
