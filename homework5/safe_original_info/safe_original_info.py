@@ -14,18 +14,35 @@ print(custom_sum.__original_func)  # <function custom_sum at <some_id>>
 
 import functools
 
+WRAPPER_ASSIGNMENTS = ("__name__", "__doc__")
+
+
+def my_wraps(func, assigned=WRAPPER_ASSIGNMENTS):
+    def wrapper(wrapped_func):
+        def wrapped(*args, **kwargs):
+            return wrapped_func(*args, **kwargs)
+
+        for attr in assigned:
+            try:
+                value = getattr(func, attr)
+            except AttributeError:
+                pass
+            else:
+                setattr(wrapped, attr, value)
+        setattr(wrapped, "__original_func", func)
+
+        return wrapped
+
+    return wrapper
+
 
 def print_result(func):
-    # Place for new decorator
+    @my_wraps(func)
     def wrapper(*args, **kwargs):
         """Function-wrapper which print result of an original function"""
         result = func(*args, **kwargs)
         print(result)
         return result
-
-    wrapper.__doc__ = func.__doc__
-    wrapper.__name__ = func.__name__
-    wrapper.__original_func = func
 
     return wrapper
 
