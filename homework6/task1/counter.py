@@ -7,6 +7,7 @@ reset_instances_counter - сбросить счетчик экземпляров
 Имя декоратора и методов не менять
 Ниже пример использования
 """
+from functools import wraps
 
 
 def instances_counter(cls):
@@ -20,21 +21,20 @@ def instances_counter(cls):
         A decorator for counting class instances in __init__.
         """
 
+        @wraps(f)
         def wrapper(*args, **kwargs):
             args[0].__class__.instance_counter += 1
             f(*args, **kwargs)
 
-        wrapper.__name__ = f.__name__
-        wrapper.__doc__ = f.__doc__
         return wrapper
 
-    def get_created_instances(_cls):
+    def get_created_instances(_cls) -> int:
         """
         Return the number of existed class instances.
         """
         return _cls.instance_counter
 
-    def reset_instances_counter(_cls):
+    def reset_instances_counter(_cls) -> int:
         """
         Reset counter of existed class instances.
         :return: Value of class instance counter before reset
