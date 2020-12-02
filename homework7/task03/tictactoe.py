@@ -23,7 +23,7 @@ def tic_tac_toe_checker(board: List[List]) -> str:
     if diagonals_result:
         return f"{diagonals_result} wins!"
 
-    trans_board = list(map(lambda *r: list(r), *board))
+    trans_board = [*zip(*board)]
     for b in [board, trans_board]:
         rows_result = check_rows(b)
         if rows_result:
