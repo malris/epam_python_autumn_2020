@@ -1,7 +1,7 @@
 from typing import Any
 
 import pytest
-from homework7.task01.occurances import can_include_dict, find_occurrences
+from homework7.task01.occurances import can_include_elements, find_occurrences
 
 
 @pytest.mark.parametrize(
@@ -29,4 +29,4 @@ def test_different_element_types(tree: dict, element: Any, expected_result: int)
     ],
 )
 def test_value_can_include_dict(value: Any, expected_result: bool):
-    assert can_include_dict(value) is expected_result
+    assert can_include_elements(value) is expected_result

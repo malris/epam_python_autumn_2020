@@ -24,32 +24,30 @@ example_tree = {
     },
     "fourth": "RED",
     "fifth": ("a", 1, True, {"bla": ["25", {"1": ["RED", {"RED": "bl"}]}]}),
-    "sixth": {"RED", (True, (12, "RED"))},
+    "sixth": {12: "RED", 13: (True, (12, {1: "RED", 2: "BLUE"}))},
 }
+
+dd = {"fff": (1, {1: 2})}
 
 
 def find_occurrences(tree: dict, element: Any) -> int:
-    return _find_occurrences(tree, element)
-
-
-def _find_occurrences(tree: Any, element: Any, n: int = 0) -> int:
     """
     Function recurrently counts all the inclusions of element in the tree.
     :param tree: contains multiple nested structures.
     :param element: value to be found.'
-    :param n: accumulator
     """
+    n = 0
     for key in tree:
-        el = tree[key] if isinstance(tree, dict) else key
-        if can_include_dict(el) and not isinstance(el, type(element)):
-            n += _find_occurrences(el, element)
-        elif element == el:
+        value = tree[key] if isinstance(tree, dict) else key
+        if can_include_elements(value) and not isinstance(value, type(element)):
+            n += find_occurrences(value, element)
+        elif element == value:
             n += 1
     return n
 
 
-def can_include_dict(value: Any) -> bool:
+def can_include_elements(value: Any) -> bool:
     """
-    Function checks if the value can potentially include dict.
+    Function checks if the value can include several elements .
     """
-    return hasattr(value, "__iter__") and not isinstance(value, str)
+    return isinstance(value, (list, tuple, set, dict))
