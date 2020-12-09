@@ -37,13 +37,11 @@ class KeyValueStorage:
 
     def form_data_dict(self, path_to_file):
         with open(path_to_file) as fi:
-            self.data_dict = {
-                pair[0]: pair[1]
-                for line in fi.readlines()
-                for key, value in findall("(\S+)=(\S+)", line)
-                if (pair := self.form_item(key, value))
-                and (not self.is_attribute_built_in(pair[0]))
-            }
+            for line in fi.readlines():
+                for original_key, original_value in findall("(\S+)=(\S+)", line):
+                    key, value = self.form_item(original_key, original_value)
+                    if not self.is_attribute_built_in(key):
+                        self.data_dict[key] = value
 
     def is_attribute_built_in(self, key):
         return key in self.data_dict
