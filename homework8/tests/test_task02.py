@@ -1,13 +1,12 @@
 import os
 
 import pytest
-from homework8.task02.db_wrapper import TableData
+from homework8.task02.db_wrapper import open_TableData
 
 
-def get_table_instance(table_name):
+def get_db_name():
     path_to_db = os.path.join(os.path.dirname(__file__), "test_staff/example.sqlite")
-    table = TableData(path_to_db, table_name)
-    return table
+    return path_to_db
 
 
 @pytest.mark.parametrize(
@@ -15,8 +14,8 @@ def get_table_instance(table_name):
     [["presidents", 3], ["books", 3], ["non_existed_table", 0]],
 )
 def test_get_table_length(table_name: str, expected_result: int):
-    table = get_table_instance(table_name)
-    assert len(table) == expected_result
+    with open_TableData(get_db_name(), table_name) as table:
+        assert len(table) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -27,8 +26,8 @@ def test_get_table_length(table_name: str, expected_result: int):
     ],
 )
 def test_getitem_of_table(table_name: str, item: str, expected_result: tuple):
-    table = get_table_instance(table_name)
-    assert table[item] == expected_result
+    with open_TableData(get_db_name(), table_name) as table:
+        assert table[item] == expected_result
 
 
 @pytest.mark.parametrize(
@@ -36,9 +35,9 @@ def test_getitem_of_table(table_name: str, item: str, expected_result: tuple):
     [["non_existed_table", "Yeltsin"], ["books", "non_existed_book"]],
 )
 def test_getitem_of_table_raises_index_error(table_name: str, item: str):
-    table = get_table_instance(table_name)
-    with pytest.raises(IndexError, match="name out of range"):
-        table[item]
+    with open_TableData(get_db_name(), table_name) as table:
+        with pytest.raises(IndexError, match="name out of range"):
+            table[item]
 
 
 @pytest.mark.parametrize(
@@ -50,11 +49,11 @@ def test_getitem_of_table_raises_index_error(table_name: str, item: str):
     ],
 )
 def test_table_contains_item(table_name: str, item: str, expected_result: bool):
-    table = get_table_instance(table_name)
-    assert (item in table) is expected_result
+    with open_TableData(get_db_name(), table_name) as table:
+        assert (item in table) is expected_result
 
 
 def test_table_is_iterable():
-    presidents = get_table_instance("presidents")
-    actual_result = [president[0] for president in presidents]
-    assert actual_result == ["Yeltsin", "Trump", "Big Man Tyrone"]
+    with open_TableData(get_db_name(), "presidents") as presidents:
+        actual_result = [president[0] for president in presidents]
+        assert actual_result == ["Yeltsin", "Trump", "Big Man Tyrone"]

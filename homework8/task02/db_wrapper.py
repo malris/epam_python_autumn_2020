@@ -20,78 +20,103 @@ Use supplied example.sqlite file as database fixture file.
 """
 
 
-import os
 import sqlite3
-from functools import wraps
+from contextlib import contextmanager
 from typing import Sized
 
 
-def connected(f):
-    @wraps(f)
-    def wrapped(*args):
-        self = args[0]
-        with sqlite3.connect(self.database_name) as connection:
-            connection.row_factory = sqlite3.Row
-            self.cursor = connection.cursor()
-            res = f(*args)
-        return res
-
-    return wrapped
+@contextmanager
+def open_TableData(database_name: str, table_name: str):
+    connection = sqlite3.connect(database_name)
+    connection.row_factory = sqlite3.Row
+    table_data = TableData(database_name, table_name, connection)
+    try:
+        yield table_data
+    finally:
+        table_data.close_connection()
 
 
 class TableData(Sized):
-    def __init__(self, database_name: str, table_name: str):
+    def __init__(self, database_name: str, table_name: str, connection: sqlite3.dbapi2):
         self.database_name = database_name
         self.table_name = table_name
+        self.connection = connection
 
-        self.cursor = None
-
-    @connected
     def __len__(self) -> int:
+        cursor = self.connection.cursor()
         try:
-            self.cursor.execute(f"SELECT COUNT(*) FROM {self.table_name}")
+            cursor.execute(f"SELECT COUNT(*) FROM {self.table_name}")
         except sqlite3.Error:
             amount_of_rows = 0
         else:
-            amount_of_rows = self.cursor.fetchone()[0]
+            amount_of_rows = cursor.fetchone()[0]
+        finally:
+            cursor.close()
         return amount_of_rows
 
-    @connected
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> tuple:
+        cursor = self.connection.cursor()
         try:
-            self.cursor.execute(
+            cursor.execute(
                 f"SELECT * FROM {self.table_name} WHERE name=:name", {"name": item}
             )
         except sqlite3.Error:
             raise IndexError("name out of range")
-
-        query_result = self.cursor.fetchone()
-        if not query_result:
-            raise IndexError("name out of range")
+        else:
+            query_result = cursor.fetchone()
+            if not query_result:
+                raise IndexError("name out of range")
+        finally:
+            cursor.close()
 
         return tuple(query_result)
 
-    @connected
-    def __contains__(self, item):
+    def __contains__(self, item: str) -> bool:
+        cursor = self.connection.cursor()
         try:
-            self.cursor.execute(
+            cursor.execute(
                 f"SELECT * FROM {self.table_name} WHERE name=:name", {"name": item}
             )
         except sqlite3.Error:
             contains = False
         else:
-            contains = bool(self.cursor.fetchone())
+            contains = bool(cursor.fetchone())
+        finally:
+            cursor.close()
 
         return contains
 
-    @connected
-    def __iter__(self):
-        n = self.__len__()
-        try:
-            self.cursor.execute(f"SELECT * FROM {self.table_name}")
-        except sqlite3.Error:
-            iterable_db = iter([])
-        else:
-            iterable_db = (tuple(self.cursor.fetchone()) for _ in range(n))
+    def __iter__(self) -> "TableDataIter":
+        return TableDataIter(self)
 
-        return iterable_db
+    def get_rows(self) -> list:
+        n = self.__len__()
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute(f"SELECT * FROM {self.table_name}")
+        except sqlite3.Error:
+            rows = []
+        else:
+            rows = [tuple(cursor.fetchone()) for _ in range(n)]
+        finally:
+            cursor.close()
+        return rows
+
+    def close_connection(self):
+        self.connection.close()
+
+
+class TableDataIter:
+    def __init__(self, table_data: TableData):
+        self.rows = table_data.get_rows()
+        self._cursor = 0
+
+    def __iter__(self) -> "TableDataIter":
+        return self
+
+    def __next__(self) -> tuple:
+        if len(self.rows) > self._cursor:
+            result = self.rows[self._cursor]
+            self._cursor += 1
+            return result
+        raise StopIteration
