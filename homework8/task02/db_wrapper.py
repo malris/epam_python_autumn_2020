@@ -41,42 +41,40 @@ class TableData(Sized):
         self.database_name = database_name
         self.table_name = table_name
         self.connection = connection
+        self.cursor = self.connection.cursor()
 
     def __len__(self) -> int:
-        cursor = self.connection.cursor()
         try:
-            cursor.execute(f"SELECT COUNT(*) FROM {self.table_name}")
+            self.cursor.execute(f"SELECT COUNT(*) FROM {self.table_name}")
         except sqlite3.Error:
             amount_of_rows = 0
         else:
-            amount_of_rows = cursor.fetchone()[0]
+            amount_of_rows = self.cursor.fetchone()[0]
         return amount_of_rows
 
     def __getitem__(self, item) -> tuple:
-        cursor = self.connection.cursor()
         try:
-            cursor.execute(
+            self.cursor.execute(
                 f"SELECT * FROM {self.table_name} WHERE name=:name", {"name": item}
             )
         except sqlite3.Error:
             raise IndexError("name out of range")
         else:
-            query_result = cursor.fetchone()
+            query_result = self.cursor.fetchone()
             if not query_result:
                 raise IndexError("name out of range")
 
         return tuple(query_result)
 
     def __contains__(self, item: str) -> bool:
-        cursor = self.connection.cursor()
         try:
-            cursor.execute(
+            self.cursor.execute(
                 f"SELECT * FROM {self.table_name} WHERE name=:name", {"name": item}
             )
         except sqlite3.Error:
             contains = False
         else:
-            contains = bool(cursor.fetchone())
+            contains = bool(self.cursor.fetchone())
 
         return contains
 
@@ -84,18 +82,18 @@ class TableData(Sized):
         return TableDataIter(self)
 
     def get_rows(self) -> list:
-        n = self.__len__()
-        cursor = self.connection.cursor()
+        n = len(self)
         try:
-            cursor.execute(f"SELECT * FROM {self.table_name}")
+            self.cursor.execute(f"SELECT * FROM {self.table_name}")
         except sqlite3.Error:
             rows = []
         else:
-            rows = [tuple(cursor.fetchone()) for _ in range(n)]
+            rows = [tuple(self.cursor.fetchone()) for _ in range(n)]
 
         return rows
 
     def close_connection(self):
+        self.cursor.close()
         self.connection.close()
 
 
