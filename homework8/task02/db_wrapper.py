@@ -50,8 +50,6 @@ class TableData(Sized):
             amount_of_rows = 0
         else:
             amount_of_rows = cursor.fetchone()[0]
-        finally:
-            cursor.close()
         return amount_of_rows
 
     def __getitem__(self, item) -> tuple:
@@ -66,8 +64,6 @@ class TableData(Sized):
             query_result = cursor.fetchone()
             if not query_result:
                 raise IndexError("name out of range")
-        finally:
-            cursor.close()
 
         return tuple(query_result)
 
@@ -81,8 +77,6 @@ class TableData(Sized):
             contains = False
         else:
             contains = bool(cursor.fetchone())
-        finally:
-            cursor.close()
 
         return contains
 
@@ -98,8 +92,7 @@ class TableData(Sized):
             rows = []
         else:
             rows = [tuple(cursor.fetchone()) for _ in range(n)]
-        finally:
-            cursor.close()
+
         return rows
 
     def close_connection(self):
