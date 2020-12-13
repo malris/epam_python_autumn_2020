@@ -8,6 +8,10 @@ from contextlib import contextmanager
 
 
 class Suppressor:
+    """
+    Suppresses passed exception.
+    """
+
     def __init__(self, exception):
         self.exception = exception
 
@@ -21,6 +25,10 @@ class Suppressor:
 
 @contextmanager
 def suppressor(exception):
+    """
+    Suppresses passed exception.
+    If exception doesn't inherit BaseException, it raises TypeError
+    """
     try:
         yield
     except exception:

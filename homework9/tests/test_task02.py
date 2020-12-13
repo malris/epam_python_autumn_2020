@@ -14,15 +14,38 @@ def test_context_manager_generator_realization_suppresses_exceptions():
         assert int("not_a_number")
     with suppressor(IndexError):
         assert [][2]
+    with suppressor(TypeError):
+        with suppressor(list):
+            assert [][1]
 
 
-def test_context_manager_class_realization_raises_exceptions():
-    with pytest.raises(IndexError):
-        with Suppressor(ValueError):
+@pytest.mark.parametrize(
+    ["actual_error", "expected_error"],
+    [
+        [IndexError, ValueError],
+        [IndexError, tuple],
+        [IndexError, "not_an_error"],
+    ],
+)
+def test_context_manager_class_realization_raises_exceptions(
+    actual_error, expected_error
+):
+    with pytest.raises(actual_error):
+        with Suppressor(expected_error):
             [][2]
 
 
-def test_context_manager_generator_realization_raises_exceptions():
-    with pytest.raises(IndexError):
-        with suppressor(ValueError):
+@pytest.mark.parametrize(
+    ["actual_error", "expected_error"],
+    [
+        [IndexError, ValueError],
+        [TypeError, tuple],
+        [TypeError, "not_an_error"],
+    ],
+)
+def test_context_manager_generator_realization_raises_exceptions(
+    actual_error, expected_error
+):
+    with pytest.raises(actual_error):
+        with suppressor(expected_error):
             [][2]
