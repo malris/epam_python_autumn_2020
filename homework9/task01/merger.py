@@ -14,10 +14,10 @@ file2.txt:
 
 from heapq import merge
 from pathlib import Path
-from typing import Any, Generator, Iterator, Tuple, Union
+from typing import Any, Generator, Iterable, Iterator, List, Tuple, Union
 
 
-def get_numbers(iterator: Iterator) -> Generator[int, Any, None]:
+def get_integers_from_file(iterator: Iterator) -> Iterable[int]:
     for data in iterator:
         try:
             value = int(data)
@@ -27,13 +27,16 @@ def get_numbers(iterator: Iterator) -> Generator[int, Any, None]:
             yield value
 
 
-def get_file_iterators(
+def get_file_integers_lists(
     file_list: Tuple[Union[Path, str], ...]
-) -> Generator[Generator[int, Any, None], Any, None]:
-    for file in map(open, file_list):
-        yield (value for value in get_numbers(file))
+) -> Iterable[List[int]]:
+    for path in file_list:
+        with open(path) as file:
+            yield [value for value in get_integers_from_file(file)]
 
 
 def merge_sorted_files(file_list: Tuple[Union[Path, str], ...]) -> Iterator:
-    file_iterators = (it for it in get_file_iterators(file_list))
-    return merge(*file_iterators)
+    list_of_files_integers = (
+        int_list for int_list in get_file_integers_lists(file_list)
+    )
+    return merge(*list_of_files_integers)

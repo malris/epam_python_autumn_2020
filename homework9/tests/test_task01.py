@@ -1,7 +1,7 @@
 from typing import List
 
 import pytest
-from homework9.task01.merger import get_numbers, merge_sorted_files
+from homework9.task01.merger import get_integers_from_file, merge_sorted_files
 
 
 @pytest.mark.parametrize(
@@ -16,8 +16,8 @@ from homework9.task01.merger import get_numbers, merge_sorted_files
         [["1", "2", "7,2", "15.52"], [1, 2]],
     ],
 )
-def test_get_numbers(data: List[str], expected_result: List[int]):
-    assert list(get_numbers(data)) == expected_result
+def test_get_integers_from_file(data: List[str], expected_result: List[int]):
+    assert list(get_integers_from_file(data)) == expected_result
 
 
 def test_merge_sorted_files():
