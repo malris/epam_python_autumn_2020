@@ -1,5 +1,5 @@
 import pytest
-from homework9.task02.contextManager import Suppressor, suppressor
+from homework9.task02.context_manager import Suppressor, suppressor
 
 
 def test_context_manager_class_realization_suppresses_exceptions():

@@ -19,8 +19,12 @@ class Suppressor:
         pass
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.exception == exc_type:
-            return True
+        try:
+            is_error_found = issubclass(exc_type, self.exception)
+        except TypeError:
+            pass
+        else:
+            return is_error_found
 
 
 @contextmanager
@@ -32,6 +36,4 @@ def suppressor(exception):
     try:
         yield
     except exception:
-        pass
-    finally:
         pass
