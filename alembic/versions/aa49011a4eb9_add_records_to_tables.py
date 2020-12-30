@@ -36,7 +36,7 @@ def upgrade():
         "INSERT INTO homework_results(author_id, homework_id, solution)"
         "VALUES"
         "(1, 2, 'hw1_solution'),"
-        "(2, 3, 'bad')"
+        "(2, 3, 'hw2_solution')"
     )
 
 

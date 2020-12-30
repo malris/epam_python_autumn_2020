@@ -43,6 +43,7 @@ def upgrade():
         sa.Column("author_id", sa.Integer, sa.ForeignKey("students.id")),
         sa.Column("homework_id", sa.Integer, sa.ForeignKey("homeworks.id")),
         sa.Column("solution", sa.String, nullable=False),
+        sa.CheckConstraint("length(solution) > 5", "check1"),
     )
 
 

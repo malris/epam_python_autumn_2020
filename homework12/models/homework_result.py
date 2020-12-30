@@ -1,5 +1,5 @@
 from homework12.base import Base
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import CheckConstraint, Column, ForeignKey, Integer, String
 
 
 class HomeworkResult(Base):
@@ -9,3 +9,4 @@ class HomeworkResult(Base):
     author_id = Column(Integer, ForeignKey("students.id"))
     homework_id = Column("homework_id", Integer, ForeignKey("homeworks.id"))
     solution = Column(String, nullable=False)
+    check1 = CheckConstraint("length(solution) > 5")
